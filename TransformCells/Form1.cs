@@ -42,7 +42,7 @@ namespace TransformCells
                     MessageBox.Show("Файл должен быть закрыт\n" + ex.Message);
                     return;
                 }
-
+                
                 while (!reader.EndOfStream)
                 {
                     string currentRow = reader.ReadLine();
