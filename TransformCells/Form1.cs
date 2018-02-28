@@ -67,24 +67,24 @@ namespace TransformCells
             int artLength = article.Length;
             int countLenght = count.Length;
 
-            int articleIntex = row.IndexOf(article);
+            int articleIndex = row.IndexOf(article);
             int countIndex = row.IndexOf(count);
 
-            if (articleIntex < 0 || countIndex < 0)
+            if (articleIndex < 0 || countIndex < 0)
             {
                 return new List<Articles>();
             }
             List<Articles> rowsInLine = new List<Articles>();
 
-            while (articleIntex > -1 && countIndex > -1)
+            while (articleIndex > -1 && countIndex > -1)
             {
-                int separatorIndex = row.IndexOf(';', articleIntex);
+                int separatorIndex = row.IndexOf(';', articleIndex);
                 if (separatorIndex < 0)
                 {
                     break;
                 }
-                int articleLine = separatorIndex - articleIntex - artLength;
-                string currentArticle = row.Substring(articleIntex + artLength, articleLine);
+                int articleLine = separatorIndex - articleIndex - artLength;
+                string currentArticle = row.Substring(articleIndex + artLength, articleLine);
 
 
                 separatorIndex = row.IndexOf(';', countIndex);
@@ -97,9 +97,9 @@ namespace TransformCells
 
                 rowsInLine.Add(new Articles { Number = currentArticle, Count = currentCount });
 
-                row = row.Remove(articleIntex, artLength);
+                row = row.Remove(articleIndex, artLength);
                 row = row.Remove(countIndex - artLength, countLenght);
-                articleIntex = row.IndexOf(article);
+                articleIndex = row.IndexOf(article);
                 countIndex = row.IndexOf(count);
             }
 
