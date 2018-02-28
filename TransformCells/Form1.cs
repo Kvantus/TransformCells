@@ -20,7 +20,6 @@ namespace TransformCells
             InitializeComponent();
         }
 
-        public List<string> BadTable { get; set; }
         public List<Articles> MyArticles { get; set; }
         public string FileName { get; set; }
 
@@ -31,11 +30,6 @@ namespace TransformCells
                 LabelState.Text = "Сбор данных из файла...";
                 LabelState.Refresh();
 
-                BadTable = new List<string>();
-                //ExcelPackage eP = new ExcelPackage(new FileInfo(OpenBadFile.FileName));
-                //var book = eP.Workbook;
-                //var sheet = book.Worksheets[1];
-
                 MyArticles = new List<Articles>();
                 StreamReader reader = null;
                 try
@@ -45,7 +39,7 @@ namespace TransformCells
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Файл должен быть закрыть\n" + ex.Message);
+                    MessageBox.Show("Файл должен быть закрыт\n" + ex.Message);
                     return;
                 }
 
@@ -70,7 +64,7 @@ namespace TransformCells
         {
             string article = "Артикул: ";
             string count = "Кол-во: ";
-            int artLenght = article.Length;
+            int artLength = article.Length;
             int countLenght = count.Length;
 
             int articleIntex = row.IndexOf(article);
@@ -89,8 +83,8 @@ namespace TransformCells
                 {
                     break;
                 }
-                int articleLine = separatorIndex - articleIntex - artLenght;
-                string currentArticle = row.Substring(articleIntex + artLenght, articleLine);
+                int articleLine = separatorIndex - articleIntex - artLength;
+                string currentArticle = row.Substring(articleIntex + artLength, articleLine);
 
 
                 separatorIndex = row.IndexOf(';', countIndex);
@@ -103,45 +97,13 @@ namespace TransformCells
 
                 rowsInLine.Add(new Articles { Number = currentArticle, Count = currentCount });
 
-                row = row.Remove(articleIntex, artLenght);
-                row = row.Remove(countIndex - artLenght, countLenght);
+                row = row.Remove(articleIntex, artLength);
+                row = row.Remove(countIndex - artLength, countLenght);
                 articleIntex = row.IndexOf(article);
                 countIndex = row.IndexOf(count);
             }
 
             return rowsInLine;
-        }
-
-
-        private IEnumerable<string> GetSeparatedStrings(char[] arrayChar)
-        {
-            bool quoteIsOpen = false;
-            char separator = ';';
-            char quote = '\"';
-
-            string cell = "";
-
-            for (int i = 0; i < arrayChar.Length; i++)
-            {
-                if (arrayChar[i] == separator)
-                {
-                    yield return cell;
-                }
-                else if (arrayChar[i] == quote)
-                {
-                    quoteIsOpen = true;
-                    continue;
-                }
-                else if (quoteIsOpen)
-                {
-                    cell += arrayChar[i];
-                }
-                else
-                {
-                    yield break;
-                }
-
-            }
         }
 
         private void BTransform_Click(object sender, EventArgs e)
